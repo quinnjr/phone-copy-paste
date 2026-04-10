@@ -1,0 +1,10 @@
+[package]
+name = "phone-copy-paste-server"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+gtk4 = "0.9"
+ksni = "0.2"
+mdns-sd = "0.11"
+tokio = { version = "1", features = ["rt-multi-thread", "net", "sync", "macros", "io-util"] }

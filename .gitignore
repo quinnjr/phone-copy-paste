@@ -1,0 +1,20 @@
+# Rust
+phone-copy-paste-server/target/
+
+# Flutter
+phone-copy-paste-app/.dart_tool/
+phone-copy-paste-app/build/
+phone-copy-paste-app/.flutter-plugins
+phone-copy-paste-app/.flutter-plugins-dependencies
+
+# Plans and design docs (local working references)
+docs/plans/
+docs/superpowers/
+
+# IDE
+.idea/
+.vscode/
+*.iml
+
+# OS
+.DS_Store
