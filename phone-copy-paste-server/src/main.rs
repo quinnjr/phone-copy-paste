@@ -34,10 +34,8 @@ fn main() {
             rt.block_on(server::run_server(text_rx, server_tx));
         });
 
-        // Start system tray (ksni spawns its own D-Bus thread)
-        let tray_icon = tray::PhonePasteTray::new(tray_tx);
-        let service = ksni::TrayService::new(tray_icon);
-        service.spawn();
+        // Start system tray (ksni on Linux, tray-icon on Windows/macOS)
+        let _tray = tray::create_tray(tray_tx);
 
         // Build and show the GTK window
         ui::build_ui(app, text_tx, server_rx, tray_rx);
