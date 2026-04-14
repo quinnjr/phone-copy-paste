@@ -9,7 +9,12 @@ use gtk4::{
 use tokio::sync::mpsc;
 
 use crate::server::ServerEvent;
-use crate::tray::TrayAction;
+
+/// Actions the system tray can trigger on the GTK UI thread.
+pub enum TrayAction {
+    Show,
+    Quit,
+}
 
 pub fn build_ui(
     app: &Application,

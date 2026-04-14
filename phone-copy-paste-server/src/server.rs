@@ -73,6 +73,30 @@ fn register_mdns(port: u16) {
 
     let host_fqdn = format!("{instance_name}.local.");
 
+    // Find the LAN IPv4 address from a non-loopback interface so the
+    // mDNS advertisement carries the right IP even when a VPN is active.
+    let lan_ip = if_addrs::get_if_addrs()
+        .unwrap_or_default()
+        .into_iter()
+        .find(|iface| {
+            !iface.is_loopback()
+                && matches!(iface.ip(), std::net::IpAddr::V4(v4) if !v4.is_loopback())
+                && !iface.name.starts_with("wg")
+                && !iface.name.starts_with("tun")
+        })
+        .map(|iface| iface.ip());
+
+    let ip_str = match &lan_ip {
+        Some(ip) => {
+            eprintln!("mDNS: advertising on {ip}");
+            ip.to_string()
+        }
+        None => {
+            eprintln!("mDNS: no LAN interface found, using auto-detect");
+            String::new()
+        }
+    };
+
     let mdns = match mdns_sd::ServiceDaemon::new() {
         Ok(d) => d,
         Err(e) => {
@@ -85,7 +109,7 @@ fn register_mdns(port: u16) {
         "_phonepaste._tcp.local.",
         &instance_name,
         &host_fqdn,
-        "",
+        &ip_str,
         port,
         None,
     ) {

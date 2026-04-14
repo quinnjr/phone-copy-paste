@@ -50,7 +50,9 @@ class ConnectionManager extends ChangeNotifier with WidgetsBindingObserver {
 
     await _discovery!.initialize();
     _discovery!.eventStream!.listen((event) {
-      if (event is BonsoirDiscoveryServiceResolvedEvent) {
+      if (event is BonsoirDiscoveryServiceFoundEvent) {
+        _discovery!.serviceResolver.resolveService(event.service);
+      } else if (event is BonsoirDiscoveryServiceResolvedEvent) {
         final service = event.service;
         if (service.host != null &&
             _state == ServerConnectionState.searching) {
